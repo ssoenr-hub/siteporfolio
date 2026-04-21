@@ -40,17 +40,22 @@
   const burger = document.getElementById('burger');
   const mobileMenu = document.getElementById('mobileMenu');
   if (burger && mobileMenu) {
-    burger.addEventListener('click', () => {
-      const open = mobileMenu.classList.toggle('is-open');
+    const setOpen = (open) => {
+      mobileMenu.classList.toggle('is-open', open);
       burger.classList.toggle('is-active', open);
+      burger.setAttribute('aria-expanded', String(open));
       document.body.style.overflow = open ? 'hidden' : '';
-    });
+      document.body.style.overscrollBehavior = open ? 'contain' : '';
+    };
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-controls', 'mobileMenu');
+    burger.addEventListener('click', () => setOpen(!mobileMenu.classList.contains('is-open')));
     mobileMenu.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        mobileMenu.classList.remove('is-open');
-        burger.classList.remove('is-active');
-        document.body.style.overflow = '';
-      });
+      a.addEventListener('click', () => setOpen(false));
+    });
+    // Close on Esc
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) setOpen(false);
     });
   }
 
@@ -73,10 +78,15 @@
   /* ---------- REVEAL ON SCROLL (IntersectionObserver) ---------- */
   const revealEls = document.querySelectorAll('[data-reveal]');
   if ('IntersectionObserver' in window) {
+    const stagger = reduceMotion ? 0 : 80;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('is-visible'), i * 80);
+          if (stagger) {
+            setTimeout(() => entry.target.classList.add('is-visible'), i * stagger);
+          } else {
+            entry.target.classList.add('is-visible');
+          }
           io.unobserve(entry.target);
         }
       });
@@ -136,9 +146,11 @@
     });
   }
 
-  /* ---------- TILE TILT (hover 3D subtil) ---------- */
-  if (window.matchMedia('(hover: hover)').matches && window.innerWidth > 900 && !reduceMotion) {
+  /* ---------- TILE TILT (hover 3D subtil) — attach/detach on viewport change --- */
+  const tileHandlers = new WeakMap();
+  const attachTilt = () => {
     document.querySelectorAll('.tile').forEach((tile) => {
+      if (tileHandlers.has(tile)) return;
       const media = tile.querySelector('.tile__media');
       if (!media) return;
       let rafId = null;
@@ -157,8 +169,27 @@
       };
       tile.addEventListener('mousemove', onMove);
       tile.addEventListener('mouseleave', onLeave);
+      tileHandlers.set(tile, { onMove, onLeave, media });
     });
-  }
+  };
+  const detachTilt = () => {
+    document.querySelectorAll('.tile').forEach((tile) => {
+      const h = tileHandlers.get(tile);
+      if (!h) return;
+      tile.removeEventListener('mousemove', h.onMove);
+      tile.removeEventListener('mouseleave', h.onLeave);
+      h.media.style.transform = '';
+      tileHandlers.delete(tile);
+    });
+  };
+  const tiltCheck = () => {
+    if (window.matchMedia('(hover: hover)').matches && window.innerWidth > 1024 && !reduceMotion) {
+      attachTilt();
+    } else {
+      detachTilt();
+    }
+  };
+  tiltCheck();
 
   /* ---------- GSAP PARALLAX ---------- */
   if (!reduceMotion && window.gsap && window.ScrollTrigger) {
@@ -247,36 +278,66 @@
     }
   }
 
-  /* ---------- CUSTOM CURSOR ---------- */
-  if (window.matchMedia('(hover: hover)').matches && window.innerWidth > 900) {
-    const cursor = document.getElementById('cursor');
-    const cursorDot = document.getElementById('cursorDot');
+  /* ---------- CUSTOM CURSOR — only real pointer devices ≥1200px --------------- */
+  const cursorEl = document.getElementById('cursor');
+  const cursorDotEl = document.getElementById('cursorDot');
+  let cursorActive = false;
+  let cursorRaf = null;
+
+  const enableCursor = () => {
+    if (cursorActive || !cursorEl) return;
+    cursorActive = true;
     let mx = 0, my = 0, cx = 0, cy = 0;
 
-    window.addEventListener('mousemove', (e) => {
+    const onMove = (e) => {
       mx = e.clientX; my = e.clientY;
-      if (cursorDot) {
-        cursorDot.style.left = mx + 'px';
-        cursorDot.style.top = my + 'px';
+      if (cursorDotEl) {
+        cursorDotEl.style.left = mx + 'px';
+        cursorDotEl.style.top = my + 'px';
       }
-    });
-
-    const animateCursor = () => {
+    };
+    const loop = () => {
       cx += (mx - cx) * 0.18;
       cy += (my - cy) * 0.18;
-      if (cursor) {
-        cursor.style.left = cx + 'px';
-        cursor.style.top = cy + 'px';
-      }
-      requestAnimationFrame(animateCursor);
+      cursorEl.style.left = cx + 'px';
+      cursorEl.style.top = cy + 'px';
+      cursorRaf = requestAnimationFrame(loop);
     };
-    animateCursor();
+    window.addEventListener('mousemove', onMove);
+    cursorRaf = requestAnimationFrame(loop);
+    cursorEl._cleanup = () => {
+      window.removeEventListener('mousemove', onMove);
+      cancelAnimationFrame(cursorRaf);
+    };
 
     document.querySelectorAll('a, button, [data-cursor]').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor?.classList.add('is-hover'));
-      el.addEventListener('mouseleave', () => cursor?.classList.remove('is-hover'));
+      el.addEventListener('mouseenter', () => cursorEl.classList.add('is-hover'));
+      el.addEventListener('mouseleave', () => cursorEl.classList.remove('is-hover'));
     });
-  }
+  };
+  const disableCursor = () => {
+    if (!cursorActive || !cursorEl) return;
+    cursorActive = false;
+    cursorEl._cleanup?.();
+  };
+  const cursorCheck = () => {
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1200) {
+      enableCursor();
+    } else {
+      disableCursor();
+    }
+  };
+  cursorCheck();
+
+  /* ---------- RESIZE — re-evaluate tilt + cursor ----------------------------- */
+  let resizeRaf;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => {
+      tiltCheck();
+      cursorCheck();
+    });
+  }, { passive: true });
 
   /* ---------- YEAR ---------- */
   const yearEl = document.getElementById('year');
@@ -296,10 +357,14 @@
      ========================================================================== */
   const wordEls = document.querySelectorAll('[data-reveal-word]');
   if (wordEls.length) {
-    // Hero above fold: trigger immediately with staggered delay for cinema entrance
-    wordEls.forEach((el, i) => {
-      setTimeout(() => el.classList.add('is-word-revealed'), 250 + i * 150);
-    });
+    if (reduceMotion) {
+      wordEls.forEach((el) => el.classList.add('is-word-revealed'));
+    } else {
+      // Hero above fold: trigger immediately with staggered delay for cinema entrance
+      wordEls.forEach((el, i) => {
+        setTimeout(() => el.classList.add('is-word-revealed'), 250 + i * 150);
+      });
+    }
   }
 
   /* ---------- RIPPLE ON SERVICE CTA ---------- */
