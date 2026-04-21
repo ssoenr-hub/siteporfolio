@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>Idrolle Enrique — Photographe & vidéaste · Azashoots</title>
+  <meta name="description" content="Idrolle Enrique, photographe et vidéaste. Visuels cinématiques pour athlètes, événements et automobile." />
+  <meta property="og:title" content="Idrolle Enrique — Photographe & vidéaste" />
+  <meta property="og:description" content="Visuels cinématiques pour athlètes, événements et automobile." />
+  <meta property="og:image" content="assets/Athlete/Gregoire/cover.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;700&family=Anton&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav__logo">IDROLLE ENRIQUE</a>
+    <ul class="nav__links">
+      <li><a href="#athletes">Athlètes</a></li>
+      <li><a href="#evenements">Événements</a></li>
+      <li><a href="#automobile">Automobile</a></li>
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav__burger" id="burger" aria-label="Menu">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#athletes">Athlètes</a></li>
+      <li><a href="#evenements">Événements</a></li>
+      <li><a href="#automobile">Automobile</a></li>
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- 1. HERO — editorial magazine layout, pure CSS sober bg -->
+  <section class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__bg-grid" aria-hidden="true"></div>
+    <div class="hero__bg-beam" aria-hidden="true"></div>
+    <div class="hero__overlay"></div>
+
+    <!-- Top editorial bar -->
+    <div class="hero__topbar">
+      <div class="hero__chapter" data-reveal>
+        <span class="hero__chapter-num">N°01</span>
+        <span class="hero__chapter-sep"></span>
+        <span class="hero__chapter-label">Portfolio 2025</span>
+      </div>
+      <div class="hero__loc" data-reveal>
+        <span>France</span><em>·</em><span>Europe</span>
+      </div>
+    </div>
+
+    <!-- Giant stacked name — word-mask reveal -->
+    <div class="hero__name">
+      <span class="hero__name-line" data-reveal-word><span>Idrolle</span></span>
+      <span class="hero__name-line hero__name-line--accent" data-reveal-word><span>Enrique</span></span>
+    </div>
+
+    <!-- Bottom info block -->
+    <div class="hero__footer">
+      <div class="hero__tag" data-reveal>
+        <span class="hero__tag-rule"></span>
+        <span class="hero__tag-text">Photographe &amp; vidéaste cinématique</span>
+      </div>
+      <div class="hero__actions" data-reveal>
+        <a href="#athletes" class="btn btn--primary">
+          <span>Voir le portfolio</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+        </a>
+        <a href="#contact" class="btn btn--ghost">Contact</a>
+      </div>
+    </div>
+
+    <!-- Vertical scroll indicator bottom-right -->
+    <div class="hero__scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE — Editorial band -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>Athletes</span><em>✦</em>
+      <span>Événements</span><em>✦</em>
+      <span>Automobile</span><em>✦</em>
+      <span>Cinematic</span><em>✦</em>
+      <span>Visuals</span><em>✦</em>
+      <span>France</span><em>✦</em>
+      <span>Europe</span><em>✦</em>
+      <span>Athletes</span><em>✦</em>
+      <span>Événements</span><em>✦</em>
+      <span>Automobile</span><em>✦</em>
+      <span>Cinematic</span><em>✦</em>
+      <span>Visuals</span><em>✦</em>
+      <span>France</span><em>✦</em>
+      <span>Europe</span><em>✦</em>
+    </div>
+  </div>
+
+  <!-- 2. ATHLÈTES -->
+  <section class="section" id="athletes">
+    <header class="section__header">
+      <p class="section__kicker" data-reveal>01 — Athlètes</p>
+      <h2 class="section__title" data-split="chars">Athlètes</h2>
+    </header>
+    <div class="tiles tiles--3">
+
+      <a href="projects/athlete-fabio.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Athlete/Fabio/cover.jpg" alt="Fabio Cassina" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Fabio Cassina</span>
+        </div>
+      </a>
+
+      <a href="projects/athlete-gregoire.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Athlete/Gregoire/cover.jpg" alt="Grégoire Boucher" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Grégoire Boucher</span>
+        </div>
+      </a>
+
+      <a href="projects/athlete-julia.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Athlete/Julia/cover.jpg" alt="Julia Arnaud" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Julia Arnaud</span>
+        </div>
+      </a>
+
+      <a href="projects/athlete-valentin.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Athlete/Valentin%20Leperck/cover.jpg" alt="Valentin Leperck" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Valentin Leperck</span>
+        </div>
+      </a>
+
+      <!-- POUR AJOUTER UN ATHLÈTE :
+           1. Crée le dossier : assets/Athlete/NomAthlete/
+           2. Ajoute cover.jpg + photos 01.jpg, 02.jpg... + video.mp4 (optionnel)
+           3. Duplique projects/athlete-gregoire.html en athlete-nomathlete.html
+           4. Copie-colle une des <a class="tile"> ci-dessus, adapte href, src, title -->
+    </div>
+  </section>
+
+  <!-- 3. ÉVÉNEMENTS -->
+  <section class="section" id="evenements">
+    <header class="section__header">
+      <p class="section__kicker" data-reveal>02 — Événements</p>
+      <h2 class="section__title" data-split="chars">Événements</h2>
+    </header>
+    <div class="tiles tiles--4">
+
+      <a href="projects/evenement-croosfit.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Evenement/CroosFit/cover.jpg" alt="CrossFit" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">CrossFit</span>
+        </div>
+      </a>
+
+      <a href="projects/evenement-fyb.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Evenement/FYB/cover.jpg" alt="FYB" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">FYB</span>
+        </div>
+      </a>
+
+      <a href="projects/evenement-kettlebell.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Evenement/Kettlebell/cover.jpg" alt="Kettlebell" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Kettlebell</span>
+        </div>
+      </a>
+
+      <a href="projects/evenement-usagym.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Evenement/USAGYM/cover.jpg" alt="USA GYM" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">USA GYM</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- 4. AUTOMOBILE -->
+  <section class="section" id="automobile">
+    <header class="section__header">
+      <p class="section__kicker" data-reveal>03 — Automobile</p>
+      <h2 class="section__title" data-split="chars">Automobile</h2>
+    </header>
+    <div class="tiles tiles--2">
+
+      <a href="projects/automobile-particulier.html" class="tile tile--wide" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Automobile/Particulier/cover.jpg" alt="Particulier" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Particulier</span>
+        </div>
+      </a>
+
+      <a href="projects/automobile-usagym.html" class="tile tile--wide" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Automobile/USAGYM/cover.jpg" alt="USA GYM" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">USA GYM</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- 5. DERRIÈRE L'OBJECTIF -->
+  <section class="about" id="about">
+    <div class="about__grid">
+      <div class="about__visual" data-reveal>
+        <img src="assets/about/portrait.jpg" alt="Idrolle Enrique" loading="lazy"/>
+      </div>
+      <div class="about__content">
+        <p class="section__kicker" data-reveal>04 — Derrière l'objectif</p>
+        <h2 class="about__title" data-reveal>Derrière<br/>l'objectif</h2>
+        <p class="about__name" data-reveal>Idrolle Enrique</p>
+        <p class="about__role" data-reveal>Vidéaste &amp; photographe cinématique</p>
+
+        <p class="about__lead" data-reveal>
+          Je suis vidéaste et photographe spécialisé dans la création de visuels cinématographiques, avec une approche centrée sur <em>l'impact</em>, <em>l'esthétique</em> et la <em>cohérence d'image</em>.
+        </p>
+
+        <p class="about__text" data-reveal>
+          Mon travail consiste à transformer une idée, une personne ou un projet en un visuel fort, capable de capter l'attention et de marquer durablement. Chaque réalisation est pensée dans les détails, de la direction artistique jusqu'au rendu final.
+        </p>
+        <p class="about__text" data-reveal>
+          J'interviens sur différents types de projets : fitness, barber, événementiel, mais aussi pour des particuliers et des professionnels souhaitant valoriser leur image avec un rendu propre, moderne et impactant.
+        </p>
+        <p class="about__text" data-reveal>
+          Au-delà de la simple création de contenu, j'apporte une vision : <em>cadrage</em>, <em>lumière</em>, <em>ambiance</em>, <em>storytelling</em>. L'objectif n'est pas seulement de produire une image, mais de construire une présence visuelle cohérente et qualitative.
+        </p>
+        <p class="about__text" data-reveal>
+          Je m'adapte à chaque projet avec une exigence constante, afin de proposer des visuels qui correspondent réellement à l'univers et aux attentes de mes clients.
+        </p>
+
+        <p class="about__location" data-reveal>
+          <span class="about__location-pin" aria-hidden="true"></span>
+          Basé à <strong>Lille</strong> &amp; <strong>Valenciennes</strong> · Disponible pour tout type de projet.
+        </p>
+
+        <ul class="about__stats" data-reveal>
+          <li><strong><span data-count="6" data-suffix="+">0</span></strong><span>Années photo</span></li>
+          <li><strong><span data-count="2" data-suffix="+">0</span></strong><span>Années vidéo</span></li>
+          <li><strong><span data-count="50" data-suffix="+">0</span></strong><span>Projets livrés</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. MON PARCOURS & MA VISION -->
+  <section class="journey section" id="parcours">
+    <header class="section__header">
+      <p class="section__kicker" data-reveal>05 — Mon parcours</p>
+      <h2 class="section__title" data-split="chars">Parcours &amp; vision</h2>
+    </header>
+
+    <div class="journey__intro" data-reveal>
+      <p class="journey__lead">
+        De mes débuts à aujourd'hui, mon parcours s'est construit autour d'une seule idée : <em>créer des visuels qui marquent</em>.
+      </p>
+      <p class="journey__body">
+        À travers la photographie et la vidéographie, j'ai développé une approche centrée sur l'esthétique, l'impact et la cohérence visuelle. Chaque projet est une opportunité de raconter une histoire et de valoriser une image, avec exigence et précision.
+      </p>
+    </div>
+
+    <div class="journey__grid">
+      <article class="expertise" data-reveal>
+        <div class="expertise__icon" aria-hidden="true">📸</div>
+        <h3 class="expertise__title">Photographie</h3>
+        <p class="expertise__desc">Shooting sur mesure, portrait, sport, événement, avec une mise en valeur précise et un rendu professionnel.</p>
+      </article>
+      <article class="expertise" data-reveal>
+        <div class="expertise__icon" aria-hidden="true">🎬</div>
+        <h3 class="expertise__title">Vidéographie</h3>
+        <p class="expertise__desc">Création de contenus cinématographiques, montage dynamique et storytelling visuel adapté à votre image.</p>
+      </article>
+      <article class="expertise" data-reveal>
+        <div class="expertise__icon" aria-hidden="true">🎯</div>
+        <h3 class="expertise__title">Direction artistique</h3>
+        <p class="expertise__desc">Conception visuelle, mise en scène, cadrage et ambiance pour donner une identité forte à vos projets.</p>
+      </article>
+      <article class="expertise" data-reveal>
+        <div class="expertise__icon" aria-hidden="true">📱</div>
+        <h3 class="expertise__title">Création de contenu</h3>
+        <p class="expertise__desc">Reels, TikTok, formats courts et contenu régulier pour développer votre présence en ligne.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 7. SERVICES -->
+  <section class="services section" id="services">
+    <div class="services__bg" aria-hidden="true"></div>
+    <header class="section__header">
+      <p class="section__kicker" data-reveal>06 — Prestations</p>
+      <h2 class="section__title" data-split="chars">Prestations</h2>
+    </header>
+    <div class="services__grid">
+      <article class="service" data-reveal>
+        <div class="service__num">01</div>
+        <h3 class="service__title">Photo</h3>
+        <ul class="service__list">
+          <li>Direction artistique</li>
+          <li>Shooting sur mesure</li>
+          <li>Retouche premium</li>
+        </ul>
+        <p class="service__price">Sur demande</p>
+        <a href="#contact" class="service__cta">Demander un devis →</a>
+      </article>
+      <article class="service" data-reveal>
+        <div class="service__num">02</div>
+        <h3 class="service__title">Vidéo</h3>
+        <ul class="service__list">
+          <li>Concept &amp; scénarisation</li>
+          <li>Tournage cinématique</li>
+          <li>Montage &amp; étalonnage</li>
+        </ul>
+        <p class="service__price">Sur demande</p>
+        <a href="#contact" class="service__cta">Demander un devis →</a>
+      </article>
+      <article class="service service--featured" data-reveal>
+        <div class="service__num">03</div>
+        <h3 class="service__title">Photo<br/>+ Vidéo</h3>
+        <ul class="service__list">
+          <li>Pack complet photo &amp; vidéo</li>
+          <li>Optimisé réseaux sociaux</li>
+          <li>Identité visuelle cohérente</li>
+        </ul>
+        <p class="service__price">Sur demande</p>
+        <a href="#contact" class="service__cta">Demander un devis →</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- 8. TÉMOIGNAGES -->
+  <section class="testimonials section" id="testimonials">
+    <header class="section__header">
+      <p class="section__kicker" data-reveal>07 — Témoignages</p>
+      <h2 class="section__title" data-split="chars">Ils m'ont fait confiance</h2>
+    </header>
+
+    <!-- Grille rendue par JS depuis window.AZA_TESTIMONIALS — éditer data/testimonials.js -->
+    <div class="testimonials__grid" id="testimonialsGrid" data-reveal></div>
+
+    <!-- Dots carousel (mobile only) -->
+    <div class="testimonials__dots" id="testimonialsDots" aria-hidden="true"></div>
+  </section>
+
+  <!-- 9. CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact__inner">
+      <p class="section__kicker" data-reveal>08 — Contact</p>
+      <h2 class="contact__title" data-reveal>
+        Projets sérieux uniquement.<br/>
+        Créons quelque chose <em>d'impactant</em>.
+      </h2>
+
+      <form class="form" id="contactForm" action="mailto:enriqueidrlpro@gmail.com" method="POST" enctype="text/plain">
+        <div class="form__row">
+          <label class="form__field">
+            <span>Nom</span>
+            <input type="text" name="name" required placeholder="Votre nom" />
+          </label>
+          <label class="form__field">
+            <span>Email</span>
+            <input type="email" name="email" required placeholder="vous@domaine.com" />
+          </label>
+        </div>
+        <label class="form__field">
+          <span>Votre projet</span>
+          <textarea name="message" rows="6" required placeholder="Décrivez votre projet, budget approximatif, échéance..."></textarea>
+        </label>
+        <button type="submit" class="btn btn--primary btn--block">
+          <span>Envoyer la demande</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+        </button>
+      </form>
+
+      <div class="contact__direct">
+        <a href="mailto:enriqueidrlpro@gmail.com" class="contact__link">enriqueidrlpro@gmail.com</a>
+        <a href="tel:+33601760142" class="contact__link">+33 6 01 76 01 42</a>
+        <a href="https://instagram.com/azashoots.fr" target="_blank" rel="noopener" class="contact__link">@azashoots.fr</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <p class="footer__logo">IDROLLE ENRIQUE</p>
+        <p class="footer__tag">Photographe &amp; vidéaste</p>
+      </div>
+      <div class="footer__meta">
+        <p>© <span id="year"></span> Idrolle Enrique — Tous droits réservés.</p>
+        <p>Basé en France · Disponible dans toute l'Europe</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor cursor--dot" id="cursorDot" aria-hidden="true"></div>
+
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Data source : éditez ce fichier pour modifier vos témoignages -->
+  <script src="data/testimonials.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
