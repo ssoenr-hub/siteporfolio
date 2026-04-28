@@ -1,14 +1,17 @@
 /* ==========================================================================
-   AZASHOOTS — interactions
+   AZASHOOTS — interactions v3
    - Lenis smooth scroll
    - GSAP ScrollTrigger (parallax, reveal)
-   - Custom cursor
+   - Custom magnetic cursor
+   - Focus trap mobile menu
+   - prefers-reduced-motion live listener
    ========================================================================== */
 
 (() => {
   'use strict';
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let reduceMotion = motionQuery.matches;
 
   /* ---------- LENIS SMOOTH SCROLL ---------- */
   let lenis;
@@ -29,31 +32,65 @@
 
   /* ---------- NAV SCROLL STATE ---------- */
   const nav = document.getElementById('nav');
-  const onScroll = () => {
-    if (window.scrollY > 50) nav.classList.add('is-scrolled');
-    else nav.classList.remove('is-scrolled');
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  if (nav) {
+    const onScroll = () => {
+      if (window.scrollY > 50) nav.classList.add('is-scrolled');
+      else nav.classList.remove('is-scrolled');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
 
-  /* ---------- MOBILE MENU ---------- */
+  /* ---------- MOBILE MENU + FOCUS TRAP ---------- */
   const burger = document.getElementById('burger');
   const mobileMenu = document.getElementById('mobileMenu');
   if (burger && mobileMenu) {
+    const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    let lastFocusedBeforeOpen = null;
+
+    const getFocusables = () => Array.from(mobileMenu.querySelectorAll(focusableSelector));
+
+    const trapFocus = (e) => {
+      if (!mobileMenu.classList.contains('is-open') || e.key !== 'Tab') return;
+      const focusables = getFocusables();
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
     const setOpen = (open) => {
       mobileMenu.classList.toggle('is-open', open);
       burger.classList.toggle('is-active', open);
       burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      mobileMenu.setAttribute('aria-hidden', String(!open));
       document.body.style.overflow = open ? 'hidden' : '';
       document.body.style.overscrollBehavior = open ? 'contain' : '';
+
+      if (open) {
+        lastFocusedBeforeOpen = document.activeElement;
+        const first = getFocusables()[0];
+        if (first) setTimeout(() => first.focus(), 100);
+        document.addEventListener('keydown', trapFocus);
+      } else {
+        document.removeEventListener('keydown', trapFocus);
+        if (lastFocusedBeforeOpen && typeof lastFocusedBeforeOpen.focus === 'function') {
+          lastFocusedBeforeOpen.focus();
+        }
+      }
     };
-    burger.setAttribute('aria-expanded', 'false');
-    burger.setAttribute('aria-controls', 'mobileMenu');
+
     burger.addEventListener('click', () => setOpen(!mobileMenu.classList.contains('is-open')));
     mobileMenu.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => setOpen(false));
     });
-    // Close on Esc
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) setOpen(false);
     });
@@ -68,7 +105,7 @@
       if (!target) return;
       e.preventDefault();
       if (lenis) {
-        lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+        lenis.scrollTo(target, { offset: 0, duration: 1.2 });
       } else {
         target.scrollIntoView({ behavior: 'smooth' });
       }
@@ -120,7 +157,6 @@
       const suffix = el.dataset.suffix || '';
       const duration = 1800;
       const start = performance.now();
-      // easing expo-out pour décélération cinéma
       const ease = (t) => 1 - Math.pow(1 - t, 3);
       const tick = (now) => {
         const p = Math.min(1, (now - start) / duration);
@@ -140,19 +176,16 @@
     }, { threshold: 0.5 });
     counters.forEach(el => countIO.observe(el));
   } else if (counters.length) {
-    // fallback : affiche direct target+suffix
     counters.forEach(el => {
       el.textContent = (el.dataset.count || '0') + (el.dataset.suffix || '');
     });
   }
 
-  /* ---------- TILE TILT (hover 3D subtil) — attach/detach on viewport change --- */
+  /* ---------- TILE TILT (hover 3D subtil) via CSS vars — no inline clash --- */
   const tileHandlers = new WeakMap();
   const attachTilt = () => {
     document.querySelectorAll('.tile').forEach((tile) => {
       if (tileHandlers.has(tile)) return;
-      const media = tile.querySelector('.tile__media');
-      if (!media) return;
       let rafId = null;
       const onMove = (e) => {
         const r = tile.getBoundingClientRect();
@@ -160,16 +193,18 @@
         const y = (e.clientY - r.top) / r.height - 0.5;
         cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(() => {
-          media.style.transform = `scale(1.04) translate3d(${x * -8}px, ${y * -8}px, 0)`;
+          tile.style.setProperty('--tilt-x', `${x * -6}px`);
+          tile.style.setProperty('--tilt-y', `${y * -6}px`);
         });
       };
       const onLeave = () => {
         cancelAnimationFrame(rafId);
-        media.style.transform = '';
+        tile.style.removeProperty('--tilt-x');
+        tile.style.removeProperty('--tilt-y');
       };
       tile.addEventListener('mousemove', onMove);
       tile.addEventListener('mouseleave', onLeave);
-      tileHandlers.set(tile, { onMove, onLeave, media });
+      tileHandlers.set(tile, { onMove, onLeave });
     });
   };
   const detachTilt = () => {
@@ -178,7 +213,8 @@
       if (!h) return;
       tile.removeEventListener('mousemove', h.onMove);
       tile.removeEventListener('mouseleave', h.onLeave);
-      h.media.style.transform = '';
+      tile.style.removeProperty('--tilt-x');
+      tile.style.removeProperty('--tilt-y');
       tileHandlers.delete(tile);
     });
   };
@@ -191,18 +227,68 @@
   };
   tiltCheck();
 
+  /* ---------- MAGNETIC CURSOR — attract interactives ---------------------- */
+  const magneticHandlers = new WeakMap();
+  const attachMagnetic = () => {
+    document.querySelectorAll('.btn, [data-magnetic]').forEach((el) => {
+      if (magneticHandlers.has(el)) return;
+      let rafId = null;
+      const strength = parseFloat(el.dataset.magneticStrength) || 0.35;
+      const maxDist = parseFloat(el.dataset.magneticMax) || 14;
+      const onMove = (e) => {
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const dx = (e.clientX - cx) * strength;
+        const dy = (e.clientY - cy) * strength;
+        const clampedX = Math.max(-maxDist, Math.min(maxDist, dx));
+        const clampedY = Math.max(-maxDist, Math.min(maxDist, dy));
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          el.style.setProperty('--mag-x', `${clampedX}px`);
+          el.style.setProperty('--mag-y', `${clampedY}px`);
+        });
+      };
+      const onLeave = () => {
+        cancelAnimationFrame(rafId);
+        el.style.setProperty('--mag-x', '0px');
+        el.style.setProperty('--mag-y', '0px');
+      };
+      el.addEventListener('mousemove', onMove);
+      el.addEventListener('mouseleave', onLeave);
+      magneticHandlers.set(el, { onMove, onLeave });
+    });
+  };
+  const detachMagnetic = () => {
+    document.querySelectorAll('.btn, [data-magnetic]').forEach((el) => {
+      const h = magneticHandlers.get(el);
+      if (!h) return;
+      el.removeEventListener('mousemove', h.onMove);
+      el.removeEventListener('mouseleave', h.onLeave);
+      el.style.removeProperty('--mag-x');
+      el.style.removeProperty('--mag-y');
+      magneticHandlers.delete(el);
+    });
+  };
+  const magneticCheck = () => {
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024 && !reduceMotion) {
+      attachMagnetic();
+    } else {
+      detachMagnetic();
+    }
+  };
+  magneticCheck();
+
   /* ---------- GSAP PARALLAX ---------- */
   if (!reduceMotion && window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
 
-    // Connecte Lenis à ScrollTrigger
     if (lenis) {
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add((time) => lenis.raf(time * 1000));
       gsap.ticker.lagSmoothing(0);
     }
 
-    // Hero: Ken Burns drives media (CSS). Subtle hero__name fade on exit (no transform clash).
     gsap.to('.hero__name, .hero__footer, .hero__topbar', {
       opacity: 0.15,
       y: -40,
@@ -215,7 +301,6 @@
       },
     });
 
-    // Parallax sur les cards portfolio
     document.querySelectorAll('[data-parallax] .card__media, [data-parallax] img').forEach((el) => {
       gsap.to(el, {
         yPercent: -12,
@@ -229,7 +314,6 @@
       });
     });
 
-    // Parallax doux portrait "Derrière l'objectif"
     const aboutImg = document.querySelector('.about__visual img');
     if (aboutImg) {
       gsap.to(aboutImg, {
@@ -243,46 +327,37 @@
         },
       });
     }
-
-    // Statement — animation lettre par section
-    gsap.utils.toArray('.statement__text span').forEach((el, i) => {
-      gsap.from(el, {
-        yPercent: 120,
-        opacity: 0,
-        duration: 1,
-        delay: i * 0.12,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.statement',
-          start: 'top 75%',
-        },
-      });
-    });
-
-    // BTS — scroll horizontal accéléré au scroll vertical
-    const btsTrack = document.querySelector('.bts__track');
-    const btsScroller = document.querySelector('.bts__scroller');
-    if (btsTrack && btsScroller && window.innerWidth > 900) {
-      const getAmount = () => btsTrack.scrollWidth - btsScroller.clientWidth;
-      gsap.to(btsTrack, {
-        x: () => -getAmount(),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.bts',
-          start: 'top 20%',
-          end: () => `+=${getAmount()}`,
-          scrub: 1,
-          pin: false,
-        },
-      });
-    }
   }
 
-  /* ---------- CUSTOM CURSOR — only real pointer devices ≥1200px --------------- */
+  /* ---------- CUSTOM CURSOR — real pointer ≥xl (1280px) --------------------- */
   const cursorEl = document.getElementById('cursor');
   const cursorDotEl = document.getElementById('cursorDot');
   let cursorActive = false;
   let cursorRaf = null;
+  let cursorHoverCleanup = null;
+
+  const bindCursorHover = () => {
+    if (!cursorEl) return;
+    // Clean up previous
+    if (cursorHoverCleanup) cursorHoverCleanup();
+    const targets = document.querySelectorAll('a, button, [data-cursor]');
+    const enterFns = new WeakMap();
+    const leaveFns = new WeakMap();
+    targets.forEach(el => {
+      const onEnter = () => cursorEl.classList.add('is-hover');
+      const onLeave = () => cursorEl.classList.remove('is-hover');
+      el.addEventListener('mouseenter', onEnter);
+      el.addEventListener('mouseleave', onLeave);
+      enterFns.set(el, onEnter);
+      leaveFns.set(el, onLeave);
+    });
+    cursorHoverCleanup = () => {
+      targets.forEach(el => {
+        if (enterFns.has(el)) el.removeEventListener('mouseenter', enterFns.get(el));
+        if (leaveFns.has(el)) el.removeEventListener('mouseleave', leaveFns.get(el));
+      });
+    };
+  };
 
   const enableCursor = () => {
     if (cursorActive || !cursorEl) return;
@@ -308,12 +383,10 @@
     cursorEl._cleanup = () => {
       window.removeEventListener('mousemove', onMove);
       cancelAnimationFrame(cursorRaf);
+      if (cursorHoverCleanup) cursorHoverCleanup();
     };
 
-    document.querySelectorAll('a, button, [data-cursor]').forEach(el => {
-      el.addEventListener('mouseenter', () => cursorEl.classList.add('is-hover'));
-      el.addEventListener('mouseleave', () => cursorEl.classList.remove('is-hover'));
-    });
+    bindCursorHover();
   };
   const disableCursor = () => {
     if (!cursorActive || !cursorEl) return;
@@ -321,7 +394,7 @@
     cursorEl._cleanup?.();
   };
   const cursorCheck = () => {
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1200) {
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1280 && !reduceMotion) {
       enableCursor();
     } else {
       disableCursor();
@@ -329,38 +402,49 @@
   };
   cursorCheck();
 
-  /* ---------- RESIZE — re-evaluate tilt + cursor ----------------------------- */
+  /* ---------- RESIZE — re-eval tilt + cursor + magnetic -------------------- */
   let resizeRaf;
   window.addEventListener('resize', () => {
     cancelAnimationFrame(resizeRaf);
     resizeRaf = requestAnimationFrame(() => {
       tiltCheck();
       cursorCheck();
+      magneticCheck();
     });
   }, { passive: true });
+
+  /* ---------- REDUCE MOTION LIVE LISTENER --------------------------------- */
+  const onMotionChange = (e) => {
+    reduceMotion = e.matches;
+    // Toggle effects
+    if (reduceMotion) {
+      disableCursor();
+      detachTilt();
+      detachMagnetic();
+    } else {
+      tiltCheck();
+      cursorCheck();
+      magneticCheck();
+    }
+  };
+  if (motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', onMotionChange);
+  } else if (motionQuery.addListener) {
+    motionQuery.addListener(onMotionChange);
+  }
 
   /* ---------- YEAR ---------- */
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ---------- FORM HINT ---------- */
-  const form = document.getElementById('contactForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      // mailto: fallback — pour un vrai backend, remplacer par fetch() vers un endpoint
-      // (Formspree, Resend, Getform, etc.)
-    });
-  }
-
   /* ==========================================================================
-     HERO v4 — word-mask reveal on name lines (editorial)
+     HERO — word-mask reveal on name lines (editorial)
      ========================================================================== */
   const wordEls = document.querySelectorAll('[data-reveal-word]');
   if (wordEls.length) {
     if (reduceMotion) {
       wordEls.forEach((el) => el.classList.add('is-word-revealed'));
     } else {
-      // Hero above fold: trigger immediately with staggered delay for cinema entrance
       wordEls.forEach((el, i) => {
         setTimeout(() => el.classList.add('is-word-revealed'), 250 + i * 150);
       });
@@ -384,7 +468,6 @@
 
   /* ==========================================================================
      TESTIMONIALS RENDERER — data-driven from window.AZA_TESTIMONIALS
-     Édite data/testimonials.js pour modifier les avis
      ========================================================================== */
   const testimonialsGrid = document.getElementById('testimonialsGrid');
   const testimonialsDots = document.getElementById('testimonialsDots');
@@ -408,7 +491,7 @@
       const n = Math.max(1, Math.min(5, Math.round(rating)));
       let html = '<div class="testimonial__rating" aria-label="Note ' + n + ' sur 5">';
       for (let i = 1; i <= 5; i++) {
-        html += '<span class="' + (i <= n ? 'star-on' : 'star-off') + '">★</span>';
+        html += '<span class="' + (i <= n ? 'star-on' : 'star-off') + '" aria-hidden="true">★</span>';
       }
       html += '</div>';
       return html;
@@ -416,7 +499,7 @@
 
     const renderAvatar = (t) => {
       if (t.avatar) {
-        return `<img class="testimonial__avatar" src="${escapeHtml(t.avatar)}" alt="${escapeHtml(t.name)}" loading="lazy" onerror="this.outerHTML='<div class=\\'testimonial__avatar--placeholder\\'>${escapeHtml(getInitials(t.name))}</div>'"/>`;
+        return `<img class="testimonial__avatar" src="${escapeHtml(t.avatar)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=\\'testimonial__avatar--placeholder\\' aria-hidden=\\'true\\'>${escapeHtml(getInitials(t.name))}</div>'"/>`;
       }
       return `<div class="testimonial__avatar--placeholder" aria-hidden="true">${escapeHtml(getInitials(t.name))}</div>`;
     };
@@ -436,10 +519,13 @@
       </article>
     `).join('');
 
-    /* Mobile carousel dots — sync with scroll position */
+    // Re-bind cursor hover on newly rendered testimonials
+    if (cursorActive) bindCursorHover();
+
+    /* Mobile carousel dots — buttons for a11y + tap target */
     if (testimonialsDots) {
       testimonialsDots.innerHTML = testimonials
-        .map((_, i) => `<span class="dot${i === 0 ? ' is-active' : ''}" data-idx="${i}"></span>`)
+        .map((_, i) => `<button type="button" class="dot${i === 0 ? ' is-active' : ''}" data-idx="${i}" aria-label="Témoignage ${i + 1}"></button>`)
         .join('');
 
       const dots = testimonialsDots.querySelectorAll('.dot');
@@ -451,7 +537,10 @@
         const cardW = cards[0]?.getBoundingClientRect().width || 1;
         const gap = parseFloat(getComputedStyle(testimonialsGrid).columnGap) || 22;
         const idx = Math.round(scroll / (cardW + gap));
-        dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+        dots.forEach((d, i) => {
+          d.classList.toggle('is-active', i === idx);
+          d.setAttribute('aria-current', i === idx ? 'true' : 'false');
+        });
       };
 
       testimonialsGrid.addEventListener('scroll', () => {
@@ -464,7 +553,10 @@
           const idx = parseInt(d.dataset.idx, 10);
           const card = cards[idx];
           if (card) {
-            testimonialsGrid.scrollTo({ left: card.offsetLeft - testimonialsGrid.offsetLeft, behavior: 'smooth' });
+            const gridRect = testimonialsGrid.getBoundingClientRect();
+            const cardRect = card.getBoundingClientRect();
+            const left = testimonialsGrid.scrollLeft + (cardRect.left - gridRect.left);
+            testimonialsGrid.scrollTo({ left, behavior: 'smooth' });
           }
         });
       });
@@ -472,19 +564,14 @@
   }
 
   /* ==========================================================================
-     RADICAL DA v3 — split char reveal / marquee seamless
+     SPLIT CHAR REVEAL
      ========================================================================== */
-
-  /* ---------- SPLIT CHAR REVEAL ---------- */
-  // Wrap chars per WORD to prevent mid-word line-break.
-  // Structure: <span class="char-word"><span class="char"><span>c</span></span>…</span>
-  // Spaces between words are real text nodes → allow wrap at word boundaries only.
   const splitEls = document.querySelectorAll('[data-split="chars"]');
   splitEls.forEach((el) => {
     if (el.dataset.splitDone) return;
     const text = el.textContent;
     el.textContent = '';
-    const tokens = text.split(/(\s+)/); // keep whitespace as separator tokens
+    const tokens = text.split(/(\s+)/);
     for (const token of tokens) {
       if (!token) continue;
       if (/^\s+$/.test(token)) {
@@ -521,7 +608,6 @@
     }, { threshold: 0.25 });
     splitEls.forEach(el => splitIO.observe(el));
   } else {
-    // fallback: reveal immediately
     splitEls.forEach(el => el.classList.add('is-split-revealed'));
   }
 

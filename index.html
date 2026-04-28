@@ -15,7 +15,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -27,7 +27,7 @@
 
   <!-- NAV -->
   <nav class="nav" id="nav">
-    <a href="#" class="nav__logo">IDROLLE ENRIQUE</a>
+    <a href="#hero" class="nav__logo" aria-label="Idrolle Enrique — Retour en haut">IDROLLE ENRIQUE</a>
     <ul class="nav__links">
       <li><a href="#athletes">Athlètes</a></li>
       <li><a href="#evenements">Événements</a></li>
@@ -35,12 +35,12 @@
       <li><a href="#about">À propos</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <button class="nav__burger" id="burger" aria-label="Menu">
+    <button class="nav__burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span><span></span>
     </button>
   </nav>
 
-  <div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Navigation principale" aria-hidden="true">
     <ul>
       <li><a href="#athletes">Athlètes</a></li>
       <li><a href="#evenements">Événements</a></li>
@@ -160,6 +160,33 @@
         </div>
         <div class="tile__info">
           <span class="tile__title">Valentin Leperck</span>
+        </div>
+      </a>
+
+      <a href="projects/athlete-goran.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Athlete/Goran/DSC02018.jpg" alt="Goran" loading="lazy" width="1200" height="1500" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Goran</span>
+        </div>
+      </a>
+
+      <a href="projects/athlete-melina.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Athlete/Melina/DSC01779.jpg" alt="Mélina" loading="lazy" width="1200" height="1500" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Mélina</span>
+        </div>
+      </a>
+
+      <a href="projects/athlete-maevane.html" class="tile" data-reveal>
+        <div class="tile__media">
+          <img src="assets/Athlete/Maevane/DSC02407.jpg" alt="Maevane" loading="lazy" width="1200" height="1500" onerror="this.style.display='none'"/>
+        </div>
+        <div class="tile__info">
+          <span class="tile__title">Maevane</span>
         </div>
       </a>
 
