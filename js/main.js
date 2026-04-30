@@ -504,11 +504,15 @@
       return `<div class="testimonial__avatar--placeholder" aria-hidden="true">${escapeHtml(getInitials(t.name))}</div>`;
     };
 
-    testimonialsGrid.innerHTML = testimonials.map((t) => `
-      <article class="testimonial">
-        <span class="testimonial__quote" aria-hidden="true">"</span>
+    testimonialsGrid.innerHTML = testimonials.map((t) => {
+      const hasText = t.text && String(t.text).trim().length > 0;
+      return `
+      <article class="testimonial${hasText ? '' : ' testimonial--pending'}">
+        ${hasText ? '<span class="testimonial__quote" aria-hidden="true">"</span>' : ''}
         ${renderRating(t.rating)}
-        <p class="testimonial__text">${escapeHtml(t.text)}</p>
+        ${hasText
+          ? `<p class="testimonial__text">${escapeHtml(t.text)}</p>`
+          : '<p class="testimonial__text testimonial__text--pending">Avis à venir</p>'}
         <div class="testimonial__author">
           ${renderAvatar(t)}
           <div>
@@ -516,8 +520,8 @@
             ${t.role ? `<p class="testimonial__role">${escapeHtml(t.role)}</p>` : ''}
           </div>
         </div>
-      </article>
-    `).join('');
+      </article>`;
+    }).join('');
 
     // Re-bind cursor hover on newly rendered testimonials
     if (cursorActive) bindCursorHover();
