@@ -14,6 +14,13 @@
 
 window.AZA_TESTIMONIALS = [
   {
+    name: 'Lounge Barber By Chris',
+    role: 'Barbershop',
+    text: 'Idrolle a parfaitement capté l\'identité du salon — gestes précis, ambiance feutrée, rendu cinéma. Les visuels collent exactement à l\'image qu\'on veut renvoyer.',
+    rating: 5,
+    avatar: null,
+  },
+  {
     name: 'Client 1',
     role: 'Athlète',
     text: 'Votre témoignage ici. Remplacez ce texte par un vrai avis client.',
