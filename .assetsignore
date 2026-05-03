@@ -1,0 +1,28 @@
+# Cloudflare Pages / Workers Static Assets — fichiers à exclure du deploy
+# Syntaxe : gitignore-like
+
+# Git internals (peut peser plusieurs dizaines de Mo, jamais à servir)
+.git
+.git/**
+
+# Dépendances
+node_modules
+node_modules/**
+
+# Outils de dev
+.claude
+.claude/**
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+
+# Markdown de doc (optionnel — décommente si tu ne veux pas que README soit servi)
+# README.md
