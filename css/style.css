@@ -959,11 +959,15 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
   background: var(--surface);
 }
+/* Image en SUR-DIMENSION pour avoir du mou : la parallaxe GSAP (yPercent: -10)
+   translate l'image vers le haut, sans cushion ça crée une bande noire en bas. */
 .about__visual img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: 100%;
+  height: 115%;
   object-fit: cover;
-  object-position: center;
+  object-position: center top;
   transition: transform 1.4s var(--ease-expo);
 }
 .about__visual:hover img { transform: scale(1.04); }
@@ -1058,13 +1062,25 @@ a { color: inherit; text-decoration: none; }
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-/* Label = légende : caption tracking-widest plus discrète */
-.about__stats span {
+/* Le span du counter (<span data-count>) est DANS <strong> et doit hériter sa taille */
+.about__stats strong > span {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-transform: none;
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Label = légende : SEULEMENT le span direct du li (pas celui dans strong) */
+.about__stats > li > span {
   font-size: 0.7rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin-top: 0.4rem;
+  margin-top: 0.6rem;
 }
 
 /* Mobile : stack vertical avec séparateurs HORIZONTAUX, chiffre + label en ligne */
