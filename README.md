@@ -120,21 +120,44 @@ Tout dans `css/style.css`, section `:root` :
 
 Polices Google Fonts (Bebas Neue + Inter) chargées via `<link>` dans `<head>`.
 
-## Contact form
+## Formulaire de contact (Formspree)
 
-Le formulaire actuel utilise `mailto:` (ouvre le client mail du visiteur).
+Le formulaire envoie les messages à `enriqueidrlpro@gmail.com` via **Formspree** (envoi AJAX, 100% client-side, **pas de backend**).
 
-Pour un vrai envoi auto : inscris-toi sur https://formspree.io (gratuit, 50/mois), puis remplace dans `index.html` :
+L'endpoint est déjà configuré dans `js/config.js` et committé dans le repo : **le formulaire fonctionne out-of-the-box**, rien à faire pour qu'il marche en local ou en prod.
 
-```html
-<form action="mailto:..." method="POST">
-```
+### Tester en local
 
-par
+1. Ouvrir `index.html` dans le navigateur
+2. Remplir le formulaire avec un email valide et envoyer
+3. L'email arrive sur `enriqueidrlpro@gmail.com` dans la minute (vérifier les spams la 1ère fois)
+4. Sur le site, le toast violet **"Message bien reçu"** apparaît en bas
 
-```html
-<form action="https://formspree.io/f/TON_ID" method="POST">
-```
+### Changer d'endpoint (optionnel)
+
+Si tu veux migrer le form vers un autre compte Formspree (ou tout autre service compatible POST JSON) :
+
+1. Crée un nouveau form sur https://formspree.io et configure-le pour `enriqueidrlpro@gmail.com`
+2. Copie le nouvel endpoint (format `https://formspree.io/f/xxxxxxxx`)
+3. Édite `js/config.js`, remplace la valeur de `formspreeEndpoint`
+4. Commit + push
+
+### Sécurité & anti-spam
+
+- **Honeypot** `_gotcha` (champ caché) : les bots qui remplissent tout sont bloqués silencieusement côté Formspree
+- **Validation HTML5** côté client (email, champs requis)
+- **Rate limit** : bouton désactivé 30s après un envoi réussi
+- Pour activer reCAPTCHA en plus : Formspree Dashboard → Settings → reCAPTCHA
+
+### Limites du plan gratuit Formspree
+
+- 50 envois/mois sur le plan gratuit
+- Si tu dépasses régulièrement : upgrade payant Formspree, ou migration vers EmailJS (200/mois gratuit) — me faire signe pour adapter le code
+
+### Si l'endpoint devient invalide / le form ne marche plus
+
+- Au submit : toast rouge avec un message d'erreur + le `mailto:enriqueidrlpro@gmail.com` cliquable comme fallback
+- Le bloc `.contact__direct` (mail + téléphone + Insta) reste TOUJOURS visible en dessous comme fallback permanent
 
 ## Déployer
 

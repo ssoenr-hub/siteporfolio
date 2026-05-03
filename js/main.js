@@ -568,6 +568,122 @@
   }
 
   /* ==========================================================================
+     CONTACT FORM — Formspree AJAX + DA toast
+     - Endpoint dans window.AZA_CONFIG.formspreeEndpoint (js/config.js)
+     - Si manquant ou placeholder : toast "non configuré" + mailto fallback
+     - Honeypot _gotcha : bots silencieusement bloqués
+     - Rate limit : bouton désactivé 30s post-succès
+     ========================================================================== */
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    const cfg = (typeof window !== 'undefined' && window.AZA_CONFIG) || {};
+    const endpoint = cfg.formspreeEndpoint;
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const submitLabel = submitBtn?.querySelector('.btn__label');
+    const originalLabel = submitLabel?.textContent || 'Envoyer la demande';
+    const FALLBACK_MAILTO = 'enriqueidrlpro@gmail.com';
+    const fallbackLink = `<a href="mailto:${FALLBACK_MAILTO}">${FALLBACK_MAILTO}</a>`;
+    let lockTimer = null;
+
+    // Toast UI — un seul élément réutilisé
+    const toast = document.createElement('div');
+    toast.className = 'aza-toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    document.body.appendChild(toast);
+
+    let toastTimer = null;
+    const showToast = (variant, html, duration = 7000) => {
+      toast.dataset.variant = variant;
+      toast.innerHTML =
+        '<span class="aza-toast__icon" aria-hidden="true"></span>' +
+        '<span class="aza-toast__msg">' + html + '</span>';
+      toast.classList.add('is-visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('is-visible'), duration);
+    };
+
+    const setState = (state) => {
+      contactForm.dataset.state = state;
+      if (!submitBtn) return;
+      if (state === 'loading') {
+        submitBtn.disabled = true;
+        if (submitLabel) submitLabel.textContent = 'Envoi en cours…';
+      } else if (state === 'success') {
+        submitBtn.disabled = true;
+        if (submitLabel) submitLabel.textContent = 'Demande envoyée ✓';
+        clearTimeout(lockTimer);
+        lockTimer = setTimeout(() => {
+          submitBtn.disabled = false;
+          if (submitLabel) submitLabel.textContent = originalLabel;
+          contactForm.dataset.state = 'idle';
+        }, 30000);
+      } else {
+        submitBtn.disabled = false;
+        if (submitLabel) submitLabel.textContent = originalLabel;
+      }
+    };
+
+    const isConfigured = endpoint && !/YOUR_FORMSPREE_ID/.test(endpoint);
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Honeypot — silent block
+      const honey = contactForm.querySelector('input[name="_gotcha"]');
+      if (honey && honey.value) return;
+
+      // Validation HTML5 native (le `novalidate` du form la désactive — on la rappelle ici)
+      if (!contactForm.checkValidity()) {
+        contactForm.reportValidity();
+        return;
+      }
+
+      if (!isConfigured) {
+        showToast(
+          'error',
+          'Formulaire pas encore configuré. Écrivez-moi directement à ' + fallbackLink + '.',
+          12000
+        );
+        return;
+      }
+
+      setState('loading');
+      const data = new FormData(contactForm);
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          contactForm.reset();
+          setState('success');
+          showToast('success', 'Message bien reçu — je reviens vers vous très vite.');
+        } else {
+          let msg = "Une erreur est survenue lors de l'envoi.";
+          try {
+            const json = await res.json();
+            if (Array.isArray(json.errors) && json.errors.length) {
+              msg = json.errors.map((er) => er.message).filter(Boolean).join('. ');
+            }
+          } catch (_) { /* ignore */ }
+          setState('idle');
+          showToast('error', msg + ' Vous pouvez aussi écrire à ' + fallbackLink + '.', 12000);
+        }
+      } catch (err) {
+        setState('idle');
+        showToast(
+          'error',
+          'Connexion impossible. Écrivez-moi directement à ' + fallbackLink + '.',
+          12000
+        );
+      }
+    });
+  }
+
+  /* ==========================================================================
      SPLIT CHAR REVEAL
      ========================================================================== */
   const splitEls = document.querySelectorAll('[data-split="chars"]');

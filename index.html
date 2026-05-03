@@ -27,7 +27,7 @@
 
   <!-- NAV -->
   <nav class="nav" id="nav">
-    <a href="#hero" class="nav__logo" aria-label="Idrolle Enrique — Retour en haut">IDROLLE ENRIQUE</a>
+    <a href="#hero" class="nav__logo" aria-label="azashoots — retour en haut">AZASHOOTS</a>
     <ul class="nav__links">
       <li><a href="#athletes">Athlètes</a></li>
       <li><a href="#evenements">Événements</a></li>
@@ -469,7 +469,14 @@
         Créons quelque chose <em>d'impactant</em>.
       </h2>
 
-      <form class="form" id="contactForm" action="mailto:enriqueidrlpro@gmail.com" method="POST" enctype="text/plain">
+      <!-- Formspree — endpoint dans js/config.js. Envoie sur enriqueidrlpro@gmail.com. -->
+
+      <form class="form" id="contactForm" data-state="idle" novalidate>
+        <!-- Honeypot anti-bot (Formspree convention : champ caché) -->
+        <input class="form__honey" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <!-- Sujet de l'email reçu côté Formspree -->
+        <input type="hidden" name="_subject" value="Nouveau contact — azashoots" />
+
         <div class="form__row">
           <label class="form__field">
             <span>Nom</span>
@@ -481,12 +488,24 @@
           </label>
         </div>
         <label class="form__field">
+          <span>Type de prestation</span>
+          <select name="prestation" required>
+            <option value="" disabled selected>Sélectionnez…</option>
+            <option value="Athlète">Athlète</option>
+            <option value="Événement">Événement</option>
+            <option value="Automobile">Automobile</option>
+            <option value="Barber">Barber</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </label>
+        <label class="form__field">
           <span>Votre projet</span>
           <textarea name="message" rows="6" required autocomplete="off" placeholder="Décrivez votre projet, budget approximatif, échéance…"></textarea>
         </label>
         <button type="submit" class="btn btn--primary btn--block">
-          <span>Envoyer la demande</span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+          <span class="btn__label">Envoyer la demande</span>
+          <span class="btn__spinner" aria-hidden="true"></span>
+          <svg class="btn__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
         </button>
       </form>
 
@@ -504,8 +523,8 @@
   <footer class="footer">
     <div class="footer__inner">
       <div class="footer__brand">
-        <p class="footer__logo">IDROLLE ENRIQUE</p>
-        <p class="footer__tag">Photographe &amp; vidéaste</p>
+        <p class="footer__logo">AZASHOOTS</p>
+        <p class="footer__tag">Idrolle Enrique · Photographe &amp; vidéaste</p>
       </div>
       <div class="footer__meta">
         <p>© <span id="year"></span> Idrolle Enrique — Tous droits réservés.</p>
@@ -522,6 +541,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <!-- Data source : éditez ce fichier pour modifier vos témoignages -->
   <script src="data/testimonials.js" defer></script>
+  <!-- Endpoint Formspree (envoi formulaire de contact) -->
+  <script src="js/config.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
