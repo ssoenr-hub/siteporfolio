@@ -16,8 +16,12 @@ $RECYCLE.BIN/
 *.log
 npm-debug.log*
 
-# Node (si jamais)
+# Node
 node_modules/
+
+# Vite build output
+dist/
+.vite/
 
 # Temp
 *.tmp
