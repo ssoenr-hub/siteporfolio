@@ -1,19 +1,20 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Cursor from './components/Cursor';
 import Atmosphere from './components/Atmosphere';
+import ScrollProgress from './components/ScrollProgress';
 import Home from './pages/Home';
 import ProjectPage from './pages/ProjectPage';
 import { useLenis } from './hooks/useLenis';
-import { useMagneticCursor } from './hooks/useMagneticCursor';
+import { useReducedMotion } from './hooks/useReducedMotion';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
   useEffect(() => {
     if (hash) {
-      // Wait next tick — anchor target may mount after route change
       requestAnimationFrame(() => {
         const el = document.querySelector(hash);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -25,21 +26,45 @@ function ScrollToTop() {
   return null;
 }
 
+function PageTransition({ children }) {
+  const reduced = useReducedMotion();
+  if (reduced) return children;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+        <Route path="/projects/:slug" element={<PageTransition><ProjectPage /></PageTransition>} />
+        <Route path="*" element={<PageTransition><Home /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
 export default function App() {
   useLenis();
-  useMagneticCursor();
 
   return (
     <>
       <Atmosphere />
+      <ScrollProgress />
       <Nav />
       <ScrollToTop />
       <main id="main">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/projects/:slug" element={<ProjectPage />} />
-          <Route path="*" element={<Home />} />
-        </Routes>
+        <AnimatedRoutes />
       </main>
       <Footer />
       <Cursor />

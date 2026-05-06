@@ -1,13 +1,41 @@
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import Reveal from './Reveal';
 import Counter from './Counter';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 export default function About() {
+  const reduced = useReducedMotion();
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+  const smooth = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const imgY = useTransform(smooth, [0, 1], ['-12%', '12%']);
+  const imgScale = useTransform(smooth, [0, 0.5, 1], [1.05, 1, 1.05]);
+
   return (
-    <section className="about" id="about">
+    <section className="about" id="about" ref={ref}>
       <div className="about__grid">
-        <Reveal className="about__visual">
-          <img src="/assets/about/portrait.jpg" alt="Portrait d'Idrolle Enrique" loading="lazy" width="1000" height="1300" />
-        </Reveal>
+        <motion.div
+          className="about__visual"
+          initial={reduced ? false : { opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="about__visual-frame">
+            <motion.img
+              src="/assets/about/portrait.jpg"
+              alt="Portrait d'Idrolle Enrique"
+              loading="lazy"
+              width="1000"
+              height="1300"
+              style={reduced ? {} : { y: imgY, scale: imgScale }}
+            />
+          </div>
+        </motion.div>
         <div className="about__content">
           <Reveal as="p" className="section__kicker">05 — Derrière l'objectif</Reveal>
           <Reveal as="h2" className="about__title">Derrière<br />l'objectif</Reveal>
