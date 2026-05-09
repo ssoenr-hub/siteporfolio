@@ -1,25 +1,25 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
 const charReveal = (i = 0) => ({
   hidden: { y: '100%', opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 1, delay: 0.3 + i * 0.04, ease: [0.22, 1, 0.36, 1] } },
+  visible: { y: 0, opacity: 1, transition: { duration: 1.05, delay: 0.3 + i * 0.04, ease: [0.22, 1, 0.36, 1] } },
 });
 
 const fade = (i = 0) => ({
-  hidden: { opacity: 0, y: 18 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.9, delay: 0.6 + i * 0.12, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.9, delay: 0.7 + i * 0.12, ease: [0.22, 1, 0.36, 1] } },
 });
 
-function SerifTitle({ text, lineIndex }) {
+function SerifChars({ text, lineIdx }) {
   return (
     <span className="hero-edt__line">
       {Array.from(text).map((ch, i) => (
         <motion.span
-          key={`${lineIndex}-${i}`}
-          variants={charReveal(lineIndex * 8 + i)}
+          key={`${lineIdx}-${i}`}
+          variants={charReveal(lineIdx * 8 + i)}
           initial="hidden"
           animate="visible"
           style={{ display: 'inline-block', whiteSpace: ch === ' ' ? 'pre' : 'normal' }}
@@ -28,6 +28,94 @@ function SerifTitle({ text, lineIndex }) {
         </motion.span>
       ))}
     </span>
+  );
+}
+
+// Stacked 3D photo cards — mouse tilt parallax
+function HeroStack3D() {
+  const reduced = useReducedMotion();
+  const ref = useRef(null);
+
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 80, damping: 20, mass: 0.8 });
+  const sy = useSpring(my, { stiffness: 80, damping: 20, mass: 0.8 });
+
+  const rotY = useTransform(sx, [-1, 1], [-15, 15]);
+  const rotX = useTransform(sy, [-1, 1], [10, -10]);
+
+  // Layer offsets — each card moves differently for depth
+  const card1X = useTransform(sx, [-1, 1], ['-3%', '3%']);
+  const card1Y = useTransform(sy, [-1, 1], ['-2%', '2%']);
+  const card2X = useTransform(sx, [-1, 1], ['-6%', '6%']);
+  const card2Y = useTransform(sy, [-1, 1], ['-3%', '3%']);
+  const card3X = useTransform(sx, [-1, 1], ['-9%', '9%']);
+  const card3Y = useTransform(sy, [-1, 1], ['-4%', '4%']);
+
+  const onMove = (e) => {
+    if (reduced) return;
+    const r = ref.current.getBoundingClientRect();
+    mx.set((e.clientX - r.left) / r.width - 0.5);
+    my.set((e.clientY - r.top) / r.height - 0.5);
+  };
+  const onLeave = () => { mx.set(0); my.set(0); };
+
+  return (
+    <div className="hero-3d" ref={ref} onMouseMove={onMove} onMouseLeave={onLeave}>
+      <motion.div
+        className="hero-3d__stage"
+        style={
+          reduced
+            ? {}
+            : { rotateX: rotX, rotateY: rotY, transformPerspective: 1400, transformStyle: 'preserve-3d' }
+        }
+      >
+        {/* Back card — left */}
+        <motion.div
+          className="hero-3d__card hero-3d__card--back-left"
+          initial={reduced ? false : { opacity: 0, x: -60, rotate: -8 }}
+          animate={{ opacity: 1, x: 0, rotate: -8 }}
+          transition={{ duration: 1.4, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={reduced ? {} : { x: card3X, y: card3Y, translateZ: -80 }}
+        >
+          <img src="/assets/Athlete/Goran/DSC02018.jpg" alt="" loading="eager" />
+        </motion.div>
+
+        {/* Back card — right */}
+        <motion.div
+          className="hero-3d__card hero-3d__card--back-right"
+          initial={reduced ? false : { opacity: 0, x: 60, rotate: 8 }}
+          animate={{ opacity: 1, x: 0, rotate: 8 }}
+          transition={{ duration: 1.4, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={reduced ? {} : { x: card2X, y: card2Y, translateZ: -40 }}
+        >
+          <img src="/assets/Athlete/Maevane/DSC02407.jpg" alt="" loading="eager" />
+        </motion.div>
+
+        {/* Front center — main */}
+        <motion.div
+          className="hero-3d__card hero-3d__card--front"
+          initial={reduced ? false : { opacity: 0, y: 40, scale: 0.92 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.4, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={reduced ? {} : { x: card1X, y: card1Y, translateZ: 60 }}
+        >
+          <img src="/assets/Athlete/Gregoire/cover.jpg" alt="" loading="eager" />
+          <span className="hero-3d__caption">
+            <em>Pl. 01</em>
+            <span>Grégoire B. — FP La Sentinelle</span>
+          </span>
+        </motion.div>
+
+        {/* Floating spark accent */}
+        <motion.div
+          className="hero-3d__spark"
+          aria-hidden="true"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
+        />
+      </motion.div>
+    </div>
   );
 }
 
@@ -40,15 +128,11 @@ export default function Hero() {
     offset: ['start start', 'end start'],
   });
   const smooth = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
-
-  const titleY = useTransform(smooth, [0, 1], ['0%', '-30%']);
+  const titleY = useTransform(smooth, [0, 1], ['0%', '-25%']);
   const opacity = useTransform(smooth, [0, 0.7, 1], [1, 0.5, 0]);
-  const photoY = useTransform(smooth, [0, 1], ['0%', '15%']);
-  const photoScale = useTransform(smooth, [0, 1], [1, 1.1]);
 
   return (
     <section className="hero-edt" id="hero" ref={ref}>
-      {/* Editorial top bar */}
       <header className="hero-edt__top">
         <motion.div
           className="hero-edt__brand"
@@ -73,20 +157,16 @@ export default function Hero() {
         </motion.div>
       </header>
 
-      {/* Massive serif title — center stage */}
-      <motion.div
-        className="hero-edt__stage"
-        style={reduced ? {} : { y: titleY, opacity }}
-      >
+      <motion.div className="hero-edt__stage" style={reduced ? {} : { y: titleY, opacity }}>
         <p className="hero-edt__eyebrow">
           <span className="hero-edt__eyebrow-rule" />
           <span>Photographe &amp; vidéaste cinématique</span>
         </p>
 
         <h1 className="hero-edt__title">
-          <SerifTitle text="Idrolle" lineIndex={0} />
+          <SerifChars text="Idrolle" lineIdx={0} />
           <em className="hero-edt__title-em">
-            <SerifTitle text="Enrique" lineIndex={1} />
+            <SerifChars text="Enrique" lineIdx={1} />
           </em>
         </h1>
 
@@ -96,7 +176,7 @@ export default function Hero() {
           initial={reduced ? false : 'hidden'}
           animate="visible"
         >
-          Visuels qui marquent. <span className="hero-edt__subtitle-accent">Sport, marques, événements.</span> Direction artistique de bout en bout, du brief à la livraison.
+          Visuels qui marquent. <span className="hero-edt__subtitle-accent">Sport, marques, événements.</span> Direction artistique de bout en bout.
         </motion.p>
 
         <motion.div
@@ -115,39 +195,16 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Side photograph — right column */}
-      <motion.div
-        className="hero-edt__photo"
-        initial={reduced ? false : { opacity: 0, scale: 1.08 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        style={reduced ? {} : { y: photoY, scale: photoScale }}
-      >
-        <img src="/assets/Athlete/Gregoire/cover.jpg" alt="" loading="eager" />
-        <span className="hero-edt__photo-caption">
-          <em>Pl. 01</em> — Grégoire Boucher · Fitness Park, La Sentinelle
-        </span>
-      </motion.div>
+      {/* 3D photo stack — replaces side photo */}
+      <HeroStack3D />
 
-      {/* Index numerals (bottom-right) */}
-      <motion.div
-        className="hero-edt__index"
-        variants={fade(5)}
-        initial={reduced ? false : 'hidden'}
-        animate="visible"
-      >
-        <span>14</span>
-        <span className="hero-edt__index-label">projets</span>
-      </motion.div>
-
-      {/* Footer rule */}
       <motion.footer
         className="hero-edt__bottom"
         variants={fade(6)}
         initial={reduced ? false : 'hidden'}
         animate="visible"
       >
-        <span>Édito #N°01</span>
+        <span>Édito · N°01</span>
         <span className="hero-edt__bottom-divider" />
         <span>Faites défiler</span>
       </motion.footer>
