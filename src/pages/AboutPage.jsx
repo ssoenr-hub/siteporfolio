@@ -55,7 +55,7 @@ export default function AboutPage() {
           <div className="about-edt__contact-info">
             <dl>
               <div><dt>Email</dt><dd><a href="mailto:enriqueidrlpro@gmail.com" data-cursor="Écrire">enriqueidrlpro@gmail.com</a></dd></div>
-              <div><dt>Téléphone</dt><dd><a href="tel:+33601760142" data-cursor="Appeler">+33 6 01 76 01 42</a></dd></div>
+              <div><dt>Téléphone</dt><dd><a href="tel:+33656661189" data-cursor="Appeler">+33 6 56 66 11 89</a></dd></div>
               <div><dt>Instagram</dt><dd><a href="https://instagram.com/azashoots.fr" target="_blank" rel="noopener noreferrer" data-cursor="Suivre">@azashoots.fr</a></dd></div>
               <div><dt>Disponibilité</dt><dd>Hauts-de-France · Belgique · Europe</dd></div>
             </dl>

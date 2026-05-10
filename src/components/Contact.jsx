@@ -55,7 +55,7 @@ export default function Contact() {
 
         <div className="contact__direct">
           <a href="mailto:enriqueidrlpro@gmail.com" className="contact__link">enriqueidrlpro@gmail.com</a>
-          <a href="tel:+33601760142" className="contact__link">+33 6 01 76 01 42</a>
+          <a href="tel:+33656661189" className="contact__link">+33 6 56 66 11 89</a>
           <a
             href="https://instagram.com/azashoots.fr"
             target="_blank"
