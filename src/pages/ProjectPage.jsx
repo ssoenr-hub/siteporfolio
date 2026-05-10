@@ -3,6 +3,7 @@ import { Link, useParams, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PhotoGrid from '../components/PhotoGrid';
 import FybCatalog from '../components/project/FybCatalog';
+import MultiShoot from '../components/project/MultiShoot';
 import { getProject, getNextInCategory } from '../data/projects';
 
 export default function ProjectPage() {
@@ -73,13 +74,17 @@ export default function ProjectPage() {
 
       {project.catalog ? (
         <FybCatalog />
+      ) : project.shoots ? (
+        <div className="proj__gallery">
+          <MultiShoot shoots={project.shoots} name={project.tileTitle} />
+        </div>
       ) : (
         <div className="proj__gallery">
           <PhotoGrid images={project.gallery} name={project.tileTitle} columns={3} />
         </div>
       )}
 
-      {project.video && (
+      {project.video && !project.shoots && (
         <div className="proj__video">
           <p className="proj__video-label">La vidéo</p>
           <figure className="proj__video-frame">

@@ -11,18 +11,25 @@ export const testimonials = [
     avatar: '/assets/Athlete/Goran/DSC02018.jpg',
   },
   {
-    name: 'Mélina',
+    name: 'Mélina Chabot',
     role: 'Athlète · Giga Arena Bordeaux',
     text: 'Très bonne expérience ! Met à l\'aise devant l\'appareil même quand on ne l\'est pas forcément au départ. Le rendu final est super propre, qualitatif et professionnel. Très contente du résultat final !',
     rating: 5,
-    avatar: '/assets/Athlete/Melina/DSC01779.jpg',
+    avatar: '/assets/Athlete/Melina%20Chabot/DSC01779.jpg',
   },
   {
-    name: 'Maevane',
+    name: 'Maevane Stellato',
     role: 'Athlète · Fitness Park Poitiers',
     text: 'Très satisfaite du résultat, je ne m\'attendais pas à un si beau rendu ! La qualité des photos est vraiment au-dessus de mes attentes : travail soigné, détails travaillés, rendu final tout simplement incroyable. Il a su me guider sur les poses avec beaucoup de professionnalisme, me mettre en confiance dès le début de la séance et surtout me mettre en valeur sur les photos. On se sent accompagnée tout au long de la séance, ce qui permet d\'être naturelle et à l\'aise devant l\'objectif. Le résultat final dépasse toutes mes attentes — c\'est ce qui fait vraiment la différence. Je recommande sans hésiter, les yeux fermés ! 😌',
     rating: 5,
-    avatar: '/assets/Athlete/Maevane/DSC02407.jpg',
+    avatar: '/assets/Athlete/Maevane%20Stellato/DSC02407.jpg',
+  },
+  {
+    name: 'Arthur Glapa',
+    role: 'Athlète · USA Gym',
+    text: null,
+    rating: null,
+    avatar: '/assets/Athlete/Arthur%20Glapa/DSC00898.jpg',
   },
   {
     name: 'Julia Arnaud',
@@ -36,7 +43,7 @@ export const testimonials = [
     role: 'Athlète · Fitness Park La Sentinelle',
     text: null,
     rating: null,
-    avatar: '/assets/Athlete/Gregoire/cover.jpg',
+    avatar: '/assets/Athlete/Gregoire/shoot%201/cover.jpg',
   },
   {
     name: 'Valentin Leperck',
