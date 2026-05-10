@@ -55,7 +55,7 @@ export const projects = [
     intro: 'Capturer la discipline pure d\'un bodybuilder en séance. Ombres dures, muscle au détail, pas de filtre sur l\'effort.',
     pull: { pre: '« Chaque rep', em: 'est une déclaration.', post: ' »' },
     cover: '/assets/Athlete/Gregoire/cover.jpg',
-    gallery: Array.from({ length: 20 }, (_, i) => `/assets/Athlete/Gregoire/${String(i + 1).padStart(2, '0')}.jpg`),
+    gallery: Array.from({ length: 7 }, (_, i) => `/assets/Athlete/Gregoire/${String(i + 1).padStart(2, '0')}.jpg`),
     video: '/assets/Athlete/Gregoire/video.mp4',
     videoPoster: '/assets/Athlete/Gregoire/cover.jpg',
   },
