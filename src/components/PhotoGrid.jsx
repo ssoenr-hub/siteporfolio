@@ -101,14 +101,11 @@ export default function PhotoGrid({ images, name, columns = 3 }) {
               >
                 {String(i + 1).padStart(2, '0')}
               </motion.span>
-              <motion.img
+              <img
                 src={src}
                 alt={`${name} ${String(i + 1).padStart(2, '0')}`}
                 loading={i < 6 ? 'eager' : 'lazy'}
                 draggable="false"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: Math.min(i * 0.04, 0.6), ease: [0.22, 1, 0.36, 1] }}
                 onError={(e) => {
                   const cell = e.target.closest('.grid__cell');
                   if (cell) cell.style.display = 'none';
