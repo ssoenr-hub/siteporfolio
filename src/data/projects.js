@@ -375,7 +375,7 @@ export const projects = [
       'DSC00124.jpg', 'DSC00127.jpg', 'DSC00128.jpg', 'DSC00129.jpg', 'DSC00130.jpg',
       'DSC00131.jpg', 'DSC00134.jpg', 'DSC00135.jpg', 'DSC00136.jpg', 'DSC00137.jpg',
       'DSC00143.jpg', 'DSC00148.jpg', 'DSC00154.jpg', 'DSC00155.jpg', 'DSC00157.jpg',
-      'DSC00159.png',
+      'DSC00159.jpg',
     ].map(n => `/assets/Automobile/USAGYM/Nouveau%20dossier/${n}`),
   },
 

@@ -26,3 +26,6 @@ dist/
 # Temp
 *.tmp
 *.bak
+
+# Claude Code internals
+.claude/
