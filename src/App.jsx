@@ -1,14 +1,11 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Nav from './components/Nav';
-import Footer from './components/Footer';
+import Sidebar from './components/Sidebar';
 import Cursor from './components/Cursor';
-import Atmosphere from './components/Atmosphere';
-import ScrollProgress from './components/ScrollProgress';
 import Home from './pages/Home';
 import ProjectPage from './pages/ProjectPage';
-import { useLenis } from './hooks/useLenis';
+import AboutPage from './pages/AboutPage';
 import { useReducedMotion } from './hooks/useReducedMotion';
 
 function ScrollToTop() {
@@ -31,10 +28,12 @@ function PageTransition({ children }) {
   if (reduced) return children;
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      key="page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      style={{ minHeight: '100vh' }}
     >
       {children}
     </motion.div>
@@ -48,6 +47,7 @@ function AnimatedRoutes() {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageTransition><Home /></PageTransition>} />
         <Route path="/projects/:slug" element={<PageTransition><ProjectPage /></PageTransition>} />
+        <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
         <Route path="*" element={<PageTransition><Home /></PageTransition>} />
       </Routes>
     </AnimatePresence>
@@ -55,19 +55,14 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
-  useLenis();
-
   return (
-    <>
-      <Atmosphere />
-      <ScrollProgress />
-      <Nav />
+    <div className="layout">
+      <Sidebar />
       <ScrollToTop />
-      <main id="main">
+      <main className="layout__main" id="main">
         <AnimatedRoutes />
       </main>
-      <Footer />
       <Cursor />
-    </>
+    </div>
   );
 }
