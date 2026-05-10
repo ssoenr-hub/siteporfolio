@@ -4,30 +4,6 @@ import { motion } from 'framer-motion';
 import PhotoStrip from '../components/PhotoStrip';
 import FybCatalog from '../components/project/FybCatalog';
 import { getProject, getNextInCategory } from '../data/projects';
-import { useReducedMotion } from '../hooks/useReducedMotion';
-
-const charReveal = (i = 0) => ({
-  hidden: { y: '100%', opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.95, delay: 0.15 + i * 0.04, ease: [0.22, 1, 0.36, 1] } },
-});
-
-function SerifChars({ text }) {
-  return (
-    <span className="proj__title-line">
-      {Array.from(text).map((ch, i) => (
-        <motion.span
-          key={i}
-          variants={charReveal(i)}
-          initial="hidden"
-          animate="visible"
-          style={{ display: 'inline-block', whiteSpace: ch === ' ' ? 'pre' : 'normal' }}
-        >
-          {ch === ' ' ? ' ' : ch}
-        </motion.span>
-      ))}
-    </span>
-  );
-}
 
 export default function ProjectPage() {
   const { slug } = useParams();
@@ -49,26 +25,31 @@ export default function ProjectPage() {
       <header className="proj__head">
         <motion.p
           className="proj__kicker"
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.05 }}
+          transition={{ duration: 0.7 }}
         >
           {project.kicker}
         </motion.p>
 
-        <h1 className="proj__title">
+        <motion.h1
+          className="proj__title"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        >
           {titleLines.map((line, idx) => (
             idx === 0
-              ? <SerifChars key={idx} text={line} />
-              : <em key={idx} className="proj__title-em"><SerifChars text={line} /></em>
+              ? <span key={idx}>{line}{titleLines.length > 1 && <br />}</span>
+              : <em key={idx} className="proj__title-em">{line}</em>
           ))}
-        </h1>
+        </motion.h1>
 
         <motion.dl
           className="proj__facts"
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.6 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
         >
           {project.facts.map(([k, v]) => (
             <div key={k} className="proj__fact">
@@ -81,9 +62,9 @@ export default function ProjectPage() {
         {project.intro && (
           <motion.p
             className="proj__intro"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.75 }}
+            transition={{ duration: 0.7, delay: 0.55 }}
           >
             {project.intro}
           </motion.p>
@@ -115,7 +96,7 @@ export default function ProjectPage() {
       )}
 
       <footer className="proj__foot">
-        <Link to="/#contact" className="proj__cta" data-cursor="Écrire">
+        <Link to="/about#contact" className="proj__cta" data-cursor="Écrire">
           <span>Démarrer un projet</span>
           <span className="proj__cta-arrow">↗</span>
         </Link>
