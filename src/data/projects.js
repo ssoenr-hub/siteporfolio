@@ -59,7 +59,8 @@ export const projects = [
       {
         id: 'shoot-1',
         label: 'Shoot 01',
-        intro: 'Première session. Ombres dures, muscle au détail, pas de filtre sur l\'effort.',
+        location: 'Fitness Park · La Sentinelle',
+        intro: 'Première session au Fitness Park La Sentinelle. Ombres dures, muscle au détail, pas de filtre sur l\'effort.',
         gallery: Array.from({ length: 7 }, (_, i) => `/assets/Athlete/Gregoire/shoot%201/${String(i + 1).padStart(2, '0')}.jpg`),
         video: '/assets/Athlete/Gregoire/shoot%201/video.mp4',
         videoPoster: '/assets/Athlete/Gregoire/shoot%201/cover.jpg',
@@ -67,7 +68,8 @@ export const projects = [
       {
         id: 'shoot-2',
         label: 'Shoot 02',
-        intro: 'Seconde session — solo + duo avec Clément.',
+        location: 'One Fitness · Les Tanneurs · Lille',
+        intro: 'Seconde session à One Fitness Les Tanneurs (Lille) — solo + duo avec Clément.',
         groups: [
           {
             id: 'gregoire',
@@ -142,8 +144,8 @@ export const projects = [
   {
     slug: 'athlete-goran',
     category: 'athletes',
-    title: 'Goran',
-    tileTitle: 'Goran',
+    title: 'Goran\nDa Cunha',
+    tileTitle: 'Goran Da Cunha',
     kicker: 'Athlètes · 2026',
     facts: [
       ['Catégorie', 'Athlètes'],
@@ -151,7 +153,7 @@ export const projects = [
       ['Lieu', 'Giga Arena\nBordeaux'],
       ['Année', '2026'],
     ],
-    intro: 'Portrait sportif de Goran à la Giga Arena de Bordeaux. Lumière brute, intensité du regard, rendu éditorial.',
+    intro: 'Portrait sportif de Goran Da Cunha à la Giga Arena de Bordeaux. Lumière brute, intensité du regard, rendu éditorial.',
     cover: '/assets/Athlete/Goran/DSC02018.jpg',
     gallery: [
       '/assets/Athlete/Goran/DSC01971.jpg',
@@ -383,14 +385,14 @@ export const projects = [
     category: 'barber',
     title: 'Markus\nParis Lille',
     tileTitle: 'Markus Paris Lille',
-    kicker: 'Coiffure · Barber · 2026',
+    kicker: 'Coiffure · Salon de luxe · 2026',
     facts: [
-      ['Catégorie', 'Barbershop'],
-      ['Type', 'Photo lifestyle'],
+      ['Catégorie', 'Salon de coiffure de luxe'],
+      ['Type', 'Photo · Vidéo promotionnelle'],
       ['Client', 'Markus\nParis Lille'],
       ['Année', '2026'],
     ],
-    intro: 'Identité visuelle pour Markus Paris Lille. Galerie à venir.',
+    intro: 'Direction artistique pour Markus Paris Lille — salon de coiffure de luxe. Photo et vidéo promotionnelle pensées pour valoriser le savoir-faire et l\'identité haut de gamme du lieu. Galerie à venir.',
     cover: '/assets/Barber/Markus%20Paris%20Lille/cover.jpg',
     gallery: [],
   },

@@ -4,7 +4,7 @@
 
 export const testimonials = [
   {
-    name: 'Goran',
+    name: 'Goran Da Cunha',
     role: 'Athlète · Giga Arena Bordeaux',
     text: null,
     rating: null,

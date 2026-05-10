@@ -54,6 +54,12 @@ export default function MultiShoot({ shoots, name }) {
         ))}
       </nav>
 
+      {shoot.location && (
+        <p className="multishoot__location">
+          <span className="multishoot__location-rule" />
+          <span>{shoot.location}</span>
+        </p>
+      )}
       {shoot.intro && (
         <p className="multishoot__intro">{shoot.intro}</p>
       )}
