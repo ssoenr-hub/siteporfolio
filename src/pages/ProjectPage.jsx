@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import PhotoStrip from '../components/PhotoStrip';
+import PhotoGrid from '../components/PhotoGrid';
 import FybCatalog from '../components/project/FybCatalog';
 import { getProject, getNextInCategory } from '../data/projects';
 
@@ -74,7 +74,9 @@ export default function ProjectPage() {
       {project.catalog ? (
         <FybCatalog />
       ) : (
-        <PhotoStrip images={project.gallery} name={project.tileTitle} />
+        <div className="proj__gallery">
+          <PhotoGrid images={project.gallery} name={project.tileTitle} columns={3} />
+        </div>
       )}
 
       {project.video && (
