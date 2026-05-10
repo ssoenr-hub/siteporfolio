@@ -1,0 +1,17 @@
+# Cloudflare Workers (Static Assets) — config de déploiement
+# Décrit ce que `npx wrangler deploy` doit publier après `npm run build`.
+#
+# - Aucun Worker custom : on sert uniquement les fichiers buildés par Vite
+# - dist/ contient l'app React buildée (index.html + static/)
+# - SPA fallback : tous les 404 servent index.html pour que react-router prenne le relais
+
+name = "siteporfolio"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
+
+[observability]
+enabled = true
