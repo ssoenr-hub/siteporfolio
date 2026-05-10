@@ -256,7 +256,18 @@ img, video { display: block; max-width: 100%; }
   flex-direction: column;
   gap: 0.8rem;
 }
+.sidebar__contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.sidebar__contact li { position: relative; }
+
 .sidebar__ig {
+  position: relative;
   display: inline-flex;
   width: 28px;
   height: 28px;
@@ -271,6 +282,55 @@ img, video { display: block; max-width: 100%; }
 .sidebar__ig:hover {
   background: var(--text);
   color: var(--bg);
+}
+
+/* Tooltip au hover : pop le contact (mail / phone / handle) au-dessus de l'icone */
+.sidebar__ig[data-label]::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 0.35rem 0.65rem;
+  background: var(--text, #fafafa);
+  color: var(--bg, #050507);
+  font-family: var(--font-mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 5;
+  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.6);
+}
+.sidebar__ig[data-label]::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg) scale(0.85);
+  width: 6px;
+  height: 6px;
+  background: var(--text, #fafafa);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  z-index: 4;
+}
+.sidebar__ig[data-label]:hover::after,
+.sidebar__ig[data-label]:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.sidebar__ig[data-label]:hover::before,
+.sidebar__ig[data-label]:focus-visible::before {
+  opacity: 1;
+}
+@media (hover: none) {
+  .sidebar__ig[data-label]::after,
+  .sidebar__ig[data-label]::before { display: none; }
 }
 .sidebar__copy {
   font-family: var(--font-mono);

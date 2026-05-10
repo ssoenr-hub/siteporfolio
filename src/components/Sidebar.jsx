@@ -98,20 +98,55 @@ export default function Sidebar() {
         </nav>
 
         <footer className="sidebar__foot">
-          <a
-            href="https://instagram.com/azashoots.fr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="sidebar__ig"
-            aria-label="Instagram @azashoots.fr"
-            data-cursor="Instagram"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4" />
-              <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" />
-            </svg>
-          </a>
+          <ul className="sidebar__contact" aria-label="Contact">
+            <li>
+              <a
+                href="https://instagram.com/azashoots.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sidebar__ig"
+                aria-label="Instagram @azashoots.fr"
+                data-cursor="Instagram"
+                data-label="@azashoots.fr"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                href="mailto:enriqueidrlpro@gmail.com"
+                className="sidebar__ig"
+                aria-label="Email enriqueidrlpro@gmail.com"
+                data-cursor="Email"
+                data-label="enriqueidrlpro@gmail.com"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="M3 7l9 6 9-6" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://wa.me/33656661189"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sidebar__ig"
+                aria-label="WhatsApp +33 6 56 66 11 89"
+                data-cursor="WhatsApp"
+                data-label="+33 6 56 66 11 89"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 21l1.65-4.5A8.5 8.5 0 1 1 7.5 19.35L3 21z" />
+                  <path d="M8.5 9.5c0 4 2 6 6 6 .8 0 1.4-.1 1.8-.4l.7-.5-1.7-1.7-1 .4c-.6.2-1.5-.2-2.5-1.2s-1.4-1.9-1.2-2.5l.4-1L9.3 7l-.5.7c-.2.4-.3 1-.3 1.8z" />
+                </svg>
+              </a>
+            </li>
+          </ul>
           <p className="sidebar__copy">
             © COPYRIGHT<br />ALL RIGHTS RESERVED
           </p>
